@@ -5,7 +5,7 @@ services:
     image: postgres:15
     container_name: baliair-postgres
     ports:
-      - "5436:5432"  # Map host port 5436 to container port 5432
+      - "5436:5432"  # Host port 5436 → Container port 5432
     environment:
       POSTGRES_DB: bali_air_db
       POSTGRES_USER: bali_user
@@ -13,6 +13,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: baliair-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-baliair
+    environment:
+      SPRING_PROFILES_ACTIVE: docker  # Activate docker profile
+
 volumes:
   postgres_data:
+
+
 
