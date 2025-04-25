@@ -1,15 +1,21 @@
 package com.bali.baliairfms.conroller;
 
 import com.bali.baliairfms.dto.requestdto.FlightRequestDto;
+import com.bali.baliairfms.dto.requestdto.FlightSearchDto;
 import com.bali.baliairfms.dto.responsedto.FlightResponseDto;
 import com.bali.baliairfms.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -64,6 +70,22 @@ public class FlightController {
         flightService.markFlightAsDelayed(id, reason);
         return ResponseEntity.noContent().build();
     }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("/search")
+    public ResponseEntity<Page<FlightResponseDto>> searchFlights(
+            @RequestParam(required = false) String flightNumber,
+            @RequestParam(required = false) String departureAirport,
+            @RequestParam(required = false) String arrivalAirport,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        FlightSearchDto searchDto = new FlightSearchDto(flightNumber, departureAirport, arrivalAirport, departureDate);
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(flightService.searchFlights(searchDto, pageable));
+    }
+
 
 }
 

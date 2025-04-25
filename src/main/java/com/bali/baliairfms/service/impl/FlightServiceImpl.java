@@ -1,6 +1,7 @@
 package com.bali.baliairfms.service.impl;
 
 import com.bali.baliairfms.dto.requestdto.FlightRequestDto;
+import com.bali.baliairfms.dto.requestdto.FlightSearchDto;
 import com.bali.baliairfms.dto.requestdto.NotificationRequest;
 import com.bali.baliairfms.dto.responsedto.FlightResponseDto;
 import com.bali.baliairfms.exception.DuplicateResourceException;
@@ -17,8 +18,11 @@ import com.bali.baliairfms.repository.CrewMemberRepository;
 import com.bali.baliairfms.repository.FlightRepository;
 import com.bali.baliairfms.service.FlightService;
 import com.bali.baliairfms.service.NotificationService;
+import com.bali.baliairfms.specification.FlightSpecification;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -130,4 +134,11 @@ public class FlightServiceImpl implements FlightService {
             ));
         }
     }
+
+    @Override
+    public Page<FlightResponseDto> searchFlights(FlightSearchDto searchDto, Pageable pageable) {
+        return flightRepository.findAll(FlightSpecification.withFilters(searchDto), pageable)
+                .map(flightMapper::toDto);
+    }
+
 }
