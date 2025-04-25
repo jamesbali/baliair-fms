@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5436/bali_air_db
+    username: bali_user
+    password: bali_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: aa150fbf0709a30000e95385d1d93cd4f28cfb686867bd2b18504db6790b3962e6f5c83f1586b82c825148c1c86eee4b5c6fc1b86f7d6e701566286be8cc4833
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+
+
