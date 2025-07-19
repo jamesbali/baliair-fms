@@ -1,8 +1,7 @@
 package com.bali.baliairfms.security.user;
 
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @RequiredArgsConstructor
 public enum Permission {
